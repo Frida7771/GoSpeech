@@ -73,128 +73,37 @@ go build -o go-speech
 
 ## Usage
 
-### Speech-to-Text (ASR)
+### Option 1: Run the compiled binary
 
-Recognize speech from a WAV file:
+After building, run from the `cmd/go-speech` directory:
 
 ```bash
+cd cmd/go-speech
 ./go-speech asr <wav-file>
-```
-
-Example:
-
-```bash
-./go-speech asr ./audio.wav
-# Output: Recognized text: 你好，这是一个测试
-```
-
-### Text-to-Speech (TTS)
-
-Generate speech from text:
-
-```bash
 ./go-speech tts "<text>" [--out output.wav]
 ```
 
-Examples:
+### Option 2: Run directly with `go run`
+
+From the project root:
 
 ```bash
-# Default output location (assets/output.wav)
-./go-speech tts "你好，这是一个语音合成测试"
-
-# Custom output location
-./go-speech tts "2019年12月30日，中国人口突破14亿人" --out hello.wav
+go run ./cmd/go-speech asr <wav-file>
+go run ./cmd/go-speech tts "<text>" [--out output.wav]
 ```
 
----
-
-## Project Structure
-
-```
-go-speech/
-├── asr/                    # Speech recognition module
-│   └── paraformer/         # Paraformer ASR implementation
-├── tts/                    # Text-to-speech module
-│   └── melotts/            # MeloTTS implementation
-├── cmd/
-│   └── go-speech/          # CLI application
-├── examples/               # Example code
-├── onnx.go                # ONNX Runtime wrapper
-├── melo_weights/           # TTS model files
-├── paraformer_weights/     # ASR model files
-└── lib/                    # ONNX Runtime libraries
-```
-
----
-
-## Configuration
-
-The CLI tool uses hardcoded paths for ONNX Runtime and model files. To customize:
-
-1. Edit `cmd/go-speech/main.go`
-2. Update the `onnxRuntimePath` constant (default: `/opt/homebrew/lib/libonnxruntime.dylib`)
-3. Adjust model paths in the config structs
-
----
-
-## Development
-
-### Running tests
+Or from the `cmd/go-speech` directory:
 
 ```bash
-cd examples
-go test -v -run TestMeloTTS
-go test -v -run TestParaformer
+cd cmd/go-speech
+go run . asr <wav-file>
+go run . tts "<text>" [--out output.wav]
 ```
 
-### Using as a library
+**Note:** Do not run `go run .` from the project root, as the root package is `package speech`, not `package main`. The main package is located in `cmd/go-speech/`.
 
-```go
-package main
 
-import (
-    "github.com/getcharzp/go-speech/asr/paraformer"
-    "github.com/getcharzp/go-speech/tts/melotts"
-)
 
-// TTS example
-ttsEngine, _ := melotts.NewEngine(melotts.DefaultConfig())
-defer ttsEngine.Destroy()
-wavData, _ := ttsEngine.SynthesizeToWav("Hello", 1.0)
-
-// ASR example
-asrEngine, _ := paraformer.NewEngine(paraformer.DefaultConfig())
-defer asrEngine.Destroy()
-text, _ := asrEngine.RecognizeFile("./audio.wav")
-```
-
----
-
-## Troubleshooting
-
-### ONNX Runtime not found
-
-Ensure ONNX Runtime is installed via Homebrew and the path is correct:
-
-```bash
-brew install onnxruntime
-ls /opt/homebrew/lib/libonnxruntime.dylib
-```
-
-### Model files missing
-
-Verify model files are downloaded and in the correct locations:
-
-```bash
-ls melo_weights/model.onnx
-ls paraformer_weights/model.int8.onnx
-```
-
-### Memory issues
-
-Model loading requires significant memory (recommended: 2GB+ available). Consider adjusting `EnableCpuMemArena` in the ONNX configuration.
-
----
 
 ## License
 
