@@ -1,102 +1,215 @@
+# GoSpeech
+
+GoSpeech is a Go-based command-line speech processing tool that supports both
+speech-to-text (ASR) and text-to-speech (TTS) using ONNX Runtime.
+
+This project refactors and extends an open-source speech project into a
+production-style CLI application, with macOS-native ONNX Runtime integration
+and a pluggable architecture for multilingual speech synthesis.
+
 ---
-license: mit
-pipeline_tag: text-to-speech
-tags:
-  - text-to-speech
-  - automatic-speech-recognition
+
+## Features
+
+- 🎙 Speech-to-Text (ASR) using Paraformer  
+  - Supports Chinese and English speech recognition
+- 🔊 Text-to-Speech (TTS)
+  - Mandarin Chinese TTS using MeloTTS
+  - Architecture prepared for English TTS backend (e.g. Piper)
+- 🖥 CLI-first design with simple subcommands
+- ⚙️ Native ONNX Runtime integration on macOS (CGO)
+- 🧩 Clean and extensible project structure
+
 ---
-<div align="center" style="text-align: center;">
-  <img src="./assets/logo.png" alt="logo" width="300" style="display: block; margin: 0 auto;" />
-</div>
 
-<p align="center">
-   <a href="https://github.com/getcharzp/go-speech/fork" target="blank">
-      <img src="https://img.shields.io/github/forks/getcharzp/go-speech?style=for-the-badge" alt="go-speech forks"/>
-   </a>
-   <a href="https://github.com/getcharzp/go-speech/stargazers" target="blank">
-      <img src="https://img.shields.io/github/stars/getcharzp/go-speech?style=for-the-badge" alt="go-speech stars"/>
-   </a>
-   <a href="https://github.com/getcharzp/go-speech/pulls" target="blank">
-      <img src="https://img.shields.io/github/issues-pr/getcharzp/go-speech?style=for-the-badge" alt="go-speech pull-requests"/>
-   </a>
-   <a href='https://github.com/getcharzp/go-speech/releases'>
-      <img src='https://img.shields.io/github/release/getcharzp/go-speech?&label=Latest&style=for-the-badge'>
-   </a>
-</p>
+## Prerequisites
 
-go-speech 基于 Golang + [ONNX](https://github.com/microsoft/onnxruntime/releases/tag/v1.23.2) 构建的轻量语音库，支持 TTS（文本转语音）与 ASR（语音转文字）。 集成 MeloTTS 及达摩院 Paraformer 架构模型。
+- Go 1.20+
+- macOS (Apple Silicon tested)
+- ONNX Runtime (installed via Homebrew)
 
-## 安装
-
-```shell
-# 下载包
-go get -u github.com/getcharzp/go-speech
-
-# 下载模型、动态链接库
-git clone https://huggingface.co/getcharzp/go-speech
+```bash
+brew install onnxruntime
 ```
 
-## 快速开始
+## Installation
 
-### TTS
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/getcharzp/go-speech.git
+cd go-speech
+```
+
+### 2. Download model files
+
+Model files need to be downloaded from Hugging Face (requires git-lfs):
+
+```bash
+# Install git-lfs if not already installed
+brew install git-lfs
+git lfs install
+
+# Clone model repository
+git clone https://huggingface.co/getcharzp/go-speech ./temp_models
+
+# Move files to correct locations
+mv ./temp_models/lib ./lib
+mv ./temp_models/melo_weights ./melo_weights
+mv ./temp_models/paraformer_weights ./paraformer_weights
+
+# Clean up
+rm -rf ./temp_models
+```
+
+### 3. Build the CLI tool
+
+```bash
+cd cmd/go-speech
+go build -o go-speech
+```
+
+---
+
+## Usage
+
+### Speech-to-Text (ASR)
+
+Recognize speech from a WAV file:
+
+```bash
+./go-speech asr <wav-file>
+```
+
+Example:
+
+```bash
+./go-speech asr ./audio.wav
+# Output: Recognized text: 你好，这是一个测试
+```
+
+### Text-to-Speech (TTS)
+
+Generate speech from text:
+
+```bash
+./go-speech tts "<text>" [--out output.wav]
+```
+
+Examples:
+
+```bash
+# Default output location (assets/output.wav)
+./go-speech tts "你好，这是一个语音合成测试"
+
+# Custom output location
+./go-speech tts "2019年12月30日，中国人口突破14亿人" --out hello.wav
+```
+
+---
+
+## Project Structure
+
+```
+go-speech/
+├── asr/                    # Speech recognition module
+│   └── paraformer/         # Paraformer ASR implementation
+├── tts/                    # Text-to-speech module
+│   └── melotts/            # MeloTTS implementation
+├── cmd/
+│   └── go-speech/          # CLI application
+├── examples/               # Example code
+├── onnx.go                # ONNX Runtime wrapper
+├── melo_weights/           # TTS model files
+├── paraformer_weights/     # ASR model files
+└── lib/                    # ONNX Runtime libraries
+```
+
+---
+
+## Configuration
+
+The CLI tool uses hardcoded paths for ONNX Runtime and model files. To customize:
+
+1. Edit `cmd/go-speech/main.go`
+2. Update the `onnxRuntimePath` constant (default: `/opt/homebrew/lib/libonnxruntime.dylib`)
+3. Adjust model paths in the config structs
+
+---
+
+## Development
+
+### Running tests
+
+```bash
+cd examples
+go test -v -run TestMeloTTS
+go test -v -run TestParaformer
+```
+
+### Using as a library
 
 ```go
 package main
 
 import (
-	"github.com/getcharzp/go-speech/tts/melotts"
-	"github.com/up-zero/gotool/fileutil"
-	"log"
+    "github.com/getcharzp/go-speech/asr/paraformer"
+    "github.com/getcharzp/go-speech/tts/melotts"
 )
 
-func main() {
-	ttsEngine, err := melotts.NewEngine(melotts.DefaultConfig())
-	if err != nil {
-		log.Fatalf("创建引擎失败: %v", err)
-	}
-	defer ttsEngine.Destroy()
+// TTS example
+ttsEngine, _ := melotts.NewEngine(melotts.DefaultConfig())
+defer ttsEngine.Destroy()
+wavData, _ := ttsEngine.SynthesizeToWav("Hello", 1.0)
 
-	text := "2019年12月30日，中国人口突破14亿人,联系电话: 13800138000。"
-	wavData, err := ttsEngine.SynthesizeToWav(text, 1.0)
-	if err != nil {
-		log.Fatalf("合成失败: %v", err)
-	}
-
-	outputPath := "output.wav"
-	err = fileutil.FileSave(outputPath, wavData)
-	if err != nil {
-		log.Fatalf("保存 WAV 失败: %v", err)
-	}
-}
+// ASR example
+asrEngine, _ := paraformer.NewEngine(paraformer.DefaultConfig())
+defer asrEngine.Destroy()
+text, _ := asrEngine.RecognizeFile("./audio.wav")
 ```
 
-<audio controls>
-  <source src="https://raw.githubusercontent.com/GetcharZp/go-speech/master/assets/output.wav" type="audio/wav">
-</audio>
+---
 
-### ASR
+## Troubleshooting
 
-```go
-package main
+### ONNX Runtime not found
 
-import (
-	"fmt"
-	"github.com/getcharzp/go-speech/asr/paraformer"
-	"log"
-)
+Ensure ONNX Runtime is installed via Homebrew and the path is correct:
 
-func main() {
-	asrEngine, err := paraformer.NewEngine(paraformer.DefaultConfig())
-	if err != nil {
-		log.Fatalf("创建引擎失败: %v", err)
-	}
-	defer asrEngine.Destroy()
-
-	text, err := asrEngine.RecognizeFile("./zh-en.wav")
-	if err != nil {
-		log.Printf("识别出错: %v", err)
-		return
-	}
-	fmt.Printf("识别结果: %s\n", text)
-}
+```bash
+brew install onnxruntime
+ls /opt/homebrew/lib/libonnxruntime.dylib
 ```
+
+### Model files missing
+
+Verify model files are downloaded and in the correct locations:
+
+```bash
+ls melo_weights/model.onnx
+ls paraformer_weights/model.int8.onnx
+```
+
+### Memory issues
+
+Model loading requires significant memory (recommended: 2GB+ available). Consider adjusting `EnableCpuMemArena` in the ONNX configuration.
+
+---
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+---
+
+## Acknowledgments
+
+- [MeloTTS](https://github.com/myshell-ai/MeloTTS) - Text-to-speech model
+- [Paraformer](https://github.com/alibaba-damo-academy/FunASR) - Speech recognition model
+- [ONNX Runtime](https://github.com/microsoft/onnxruntime) - Model inference engine
+
+---
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
