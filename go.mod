@@ -1,4 +1,5 @@
-module github.com/getcharzp/go-speech
+module github.com/Frida7771/GoSpeech
+
 
 go 1.24.4
 

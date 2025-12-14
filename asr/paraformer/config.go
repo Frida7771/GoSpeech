@@ -1,6 +1,6 @@
 package paraformer
 
-import "github.com/getcharzp/go-speech"
+import speech "github.com/Frida7771/GoSpeech"
 
 const (
 	// sampleRate 采样率

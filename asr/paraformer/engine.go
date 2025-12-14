@@ -2,12 +2,13 @@ package paraformer
 
 import (
 	"fmt"
-	"github.com/getcharzp/go-speech"
-	"github.com/up-zero/gotool/convertutil"
-	ort "github.com/yalue/onnxruntime_go"
 	"math"
 	"os"
 	"strings"
+
+	speech "github.com/Frida7771/GoSpeech"
+	"github.com/up-zero/gotool/convertutil"
+	ort "github.com/yalue/onnxruntime_go"
 )
 
 // Engine 封装了 Paraformer ASR 的 ONNX 运行时和相关资源

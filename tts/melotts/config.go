@@ -1,6 +1,6 @@
 package melotts
 
-import "github.com/getcharzp/go-speech"
+import speech "github.com/Frida7771/GoSpeech"
 
 const (
 	// SampleRate 采样率，默认为 44100

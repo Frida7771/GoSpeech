@@ -3,7 +3,7 @@ package melotts
 import (
 	"fmt"
 
-	"github.com/getcharzp/go-speech"
+	speech "github.com/Frida7771/GoSpeech"
 	"github.com/up-zero/gotool/convertutil"
 	"github.com/up-zero/gotool/mediautil"
 	ort "github.com/yalue/onnxruntime_go"
