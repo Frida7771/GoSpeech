@@ -37,7 +37,7 @@ brew install onnxruntime
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/getcharzp/go-speech.git
+git clone https://github.com/Frida7771/GoSpeech
 cd go-speech
 ```
 
@@ -96,9 +96,9 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- [MeloTTS](https://github.com/myshell-ai/MeloTTS) - Text-to-speech model
-- [Paraformer](https://github.com/alibaba-damo-academy/FunASR) - Speech recognition model
-- [ONNX Runtime](https://github.com/microsoft/onnxruntime) - Model inference engine
+This project is based on the open-source project
+[getcharzp/go-speech](https://huggingface.co/getcharzp/go-speech),
+with significant refactoring and CLI restructuring.
 
 ---
 
