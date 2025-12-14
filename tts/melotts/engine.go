@@ -2,6 +2,7 @@ package melotts
 
 import (
 	"fmt"
+
 	"github.com/getcharzp/go-speech"
 	"github.com/up-zero/gotool/convertutil"
 	"github.com/up-zero/gotool/mediautil"
@@ -15,6 +16,10 @@ type Engine struct {
 	lexicon  map[string]LexiconItem
 	tokenMap map[string]int64
 	config   Config
+}
+
+func (e *Engine) SynthesizeToFile(text string, outPath string) any {
+	panic("unimplemented")
 }
 
 // NewEngine 初始化 MeloTTS 引擎
