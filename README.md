@@ -71,19 +71,16 @@ go build -o go-speech
 
 ---
 
-## Usage
+## How to Run
 
 
 After building, run from the `cmd/go-speech` directory:
 
 ```bash
 cd cmd/go-speech
-./go-speech asr <wav-file>
-./go-speech tts "<text>" [--out output.wav]
+go run cmd/go-speech/main.go tts "<text>"
+go run cmd/go-speech/main.go asr assets/output.wav
 ```
-
-
-**Note:** Do not run `go run .` from the project root, as the root package is `package speech`, not `package main`. The main package is located in `cmd/go-speech/`.
 
 
 
