@@ -1,11 +1,9 @@
 # GoSpeech
 
-GoSpeech is a Go-based command-line speech processing tool that supports both
+GoSpeech is a Go-based speech processing tool that supports both
 speech-to-text (ASR) and text-to-speech (TTS) using ONNX Runtime.
 
-This project refactors and extends an open-source speech project into a
-production-style CLI application, with macOS-native ONNX Runtime integration
-and a pluggable architecture for multilingual speech synthesis.
+This project refactors and extends an open-source speech project into a production-style CLI application, with macOS-native ONNX Runtime integration.
 
 ---
 
@@ -14,8 +12,7 @@ and a pluggable architecture for multilingual speech synthesis.
 - 🎙 Speech-to-Text (ASR) using Paraformer  
   - Supports Chinese and English speech recognition
 - 🔊 Text-to-Speech (TTS)
-  - Mandarin Chinese TTS using MeloTTS
-  - Architecture prepared for English TTS backend (e.g. Piper)
+  - Mandarin Chinese and English TTS using MeloTTS
 - 🖥 CLI-first design with simple subcommands
 - ⚙️ Native ONNX Runtime integration on macOS (CGO)
 - 🧩 Clean and extensible project structure
