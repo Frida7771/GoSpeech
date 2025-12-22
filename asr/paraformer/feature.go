@@ -2,9 +2,10 @@ package paraformer
 
 import (
 	"fmt"
-	"github.com/up-zero/gotool/mediautil"
 	"math"
 	"sync"
+
+	"github.com/Frida7771/GoSpeech/internal/mediautil"
 )
 
 var (
@@ -60,7 +61,7 @@ func computeFilterBank(samples []float32, sampleRate int, melBins int) ([][]floa
 	)
 	once.Do(func() {
 		window = mediautil.HammingWindow(frameLen)
-		melFilters = mediautil.MelFilters(sampleRate, fftSize, melBins)
+		melFilters = mediautil.MelFilters(sampleRate, fftSize, melBins, 0, 0)
 	})
 
 	// 预加重

@@ -7,7 +7,8 @@ import (
 	"strings"
 
 	speech "github.com/Frida7771/GoSpeech"
-	"github.com/up-zero/gotool/convertutil"
+	"github.com/Frida7771/GoSpeech/internal/convertutil"
+
 	ort "github.com/yalue/onnxruntime_go"
 )
 

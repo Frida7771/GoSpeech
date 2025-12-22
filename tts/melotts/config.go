@@ -19,14 +19,18 @@ type Config struct {
 	TokenPath          string // tokens.txt 路径
 	LexiconPath        string // lexicon.txt 路径
 
+	// 可选参数
+	UseCuda    bool // (可选) 是否启用 CUDA
+	NumThreads int  // (可选) ONNX 线程数, 默认由CPU核心数决定
 }
 
 // DefaultConfig 返回一套默认的配置 (基于常见的目录结构)
 func DefaultConfig() Config {
 	return Config{
-		ModelPath:   "./melo_weights/model.onnx",
-		TokenPath:   "./melo_weights/tokens.txt",
-		LexiconPath: "./melo_weights/lexicon.txt",
+		OnnxRuntimeLibPath: "",
+		ModelPath:          "./melo_weights/model.onnx",
+		TokenPath:          "./melo_weights/tokens.txt",
+		LexiconPath:        "./melo_weights/lexicon.txt",
 	}
 }
 

@@ -1,9 +1,5 @@
 module github.com/Frida7771/GoSpeech
 
-
 go 1.24.4
 
-require (
-	github.com/up-zero/gotool v0.0.0-20251206003902-bde76422a8d8
-	github.com/yalue/onnxruntime_go v1.22.0
-)
+require github.com/yalue/onnxruntime_go v1.22.0

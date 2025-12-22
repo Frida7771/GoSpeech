@@ -3,10 +3,11 @@ package paraformer
 import (
 	"bufio"
 	"fmt"
-	"github.com/up-zero/gotool/mediautil"
 	"os"
 	"strconv"
 	"strings"
+
+	"github.com/Frida7771/GoSpeech/internal/mediautil"
 )
 
 // loadTokens 加载 Token ID 映射表

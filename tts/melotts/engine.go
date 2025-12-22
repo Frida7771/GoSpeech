@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	speech "github.com/Frida7771/GoSpeech"
-	"github.com/up-zero/gotool/convertutil"
-	"github.com/up-zero/gotool/mediautil"
+	"github.com/Frida7771/GoSpeech/internal/convertutil"
+	"github.com/Frida7771/GoSpeech/internal/mediautil"
 	ort "github.com/yalue/onnxruntime_go"
 )
 
